@@ -389,11 +389,8 @@ if(SPIRV_TOOLS_BUILD_STATIC)
 
   # Create the "${SPIRV_TOOLS}" target as an alias to either "${SPIRV_TOOLS}-static"
   # or "${SPIRV_TOOLS}-shared" depending on the value of BUILD_SHARED_LIBS.
-  if(BUILD_SHARED_LIBS)
-    add_library(${SPIRV_TOOLS} ALIAS ${SPIRV_TOOLS}-shared)
-  else()
-    add_library(${SPIRV_TOOLS} ALIAS ${SPIRV_TOOLS}-static)
-  endif()
+
+  add_library(${SPIRV_TOOLS} ALIAS ${SPIRV_TOOLS}-static)
 
   set(SPIRV_TOOLS_TARGETS ${SPIRV_TOOLS}-static)
 else()
