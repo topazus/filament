@@ -1,11 +1,8 @@
 name: Linux
 
 on:
-  push:
-    branches:
-      - main
-      - release
-      - rc/**
+  - push
+  - pull_request
 
 jobs:
   build-linux:
@@ -21,3 +18,22 @@ jobs:
         with:
           name: filament-linux
           path: out/filament-release-linux.tgz
+
+  build-fedora:
+    name: build-fedora
+    runs-on: ubuntu-22.04
+    container: fedora:rawhide
+
+    steps:
+      - uses: actions/checkout@v3.3.0
+      - name: Install build dependencies
+        run: |
+          dnf -y install clang cmake ninja-build \
+            libcxx-devel libcxxabi-devel libcxx-static libcxxabi-static \
+            libXcomposite-devel libXxf86vm-devel libglvnd-devel libXi-devel
+      - name: CMake build
+        run: |
+          export CC=clang
+          export CXX=clang++
+          cmake . -G Ninja -B build -DBUILD_SHARED_LIBS=ON
+          cmake --build build -j$(nproc)
